@@ -1,0 +1,68 @@
+<!-- sales/templates/sales/add_product.html -->
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <title>🛒 POS — {% if product %}កែប្រែ{% else %}បន្ថែម{% endif %}ផលិតផល</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 40px auto; padding: 0 20px; background: #f0f4f8; }
+        h1   { color: #1a202c; }
+        nav a { margin-right: 16px; color: #2b6cb0; }
+
+        .form-card { background: white; border-radius: 10px; padding: 24px;
+                     box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+        label  { display: block; margin-top: 14px; font-weight: bold; color: #2d3748; }
+        .form-control, .form-select {
+            width: 100%; padding: 8px 10px; margin-top: 4px;
+            border: 1px solid #cbd5e0; border-radius: 6px;
+            font-size: 1em; box-sizing: border-box;
+        }
+        .btn-save { margin-top: 20px; padding: 10px 24px; background: #2b6cb0;
+                    color: white; border: none; border-radius: 6px;
+                    font-size: 1em; cursor: pointer; }
+        .btn-save:hover { background: #2c5282; }
+        .btn-back { display: inline-block; margin-top: 12px; color: #2b6cb0; text-decoration: none; }
+
+        /* ✅ Preview រូបភាព */
+        .img-preview { margin-top: 10px; }
+        .img-preview img { width: 120px; height: 120px; object-fit: cover;
+                           border-radius: 8px; border: 1px solid #e2e8f0; }
+    </style>
+</head>
+<body>
+    <h1>{% if product %}✏️ កែប្រែផលិតផល{% else %}➕ បន្ថែមផលិតផល{% endif %}</h1>
+    <nav>
+        <a href="/sales/products/">← ត្រឡប់ទៅបញ្ជីផលិតផល</a>
+    </nav>
+
+    <div class="form-card" style="margin-top: 20px;">
+
+        <!-- ✅ enctype សំខាន់សម្រាប់ Image Upload -->
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {% for field in form %}
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+                <p style="color:red; font-size:0.85em;">{{ field.errors.as_text }}</p>
+            {% endif %}
+            {% endfor %}
+
+            <!-- ✅ បង្ហាញរូបភាពបច្ចុប្បន្ន (Edit mode) -->
+            {% if product.image %}
+            <div class="img-preview">
+                <p style="color:#718096; font-size:0.85em;">រូបភាពបច្ចុប្បន្ន៖</p>
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            </div>
+            {% endif %}
+
+            <button type="submit" class="btn-save">
+                💾 {% if product %}រក្សាការកែប្រែ{% else %}បន្ថែមផលិតផល{% endif %}
+            </button>
+        </form>
+
+        <a href="/sales/products/" class="btn-back">❌ បោះបង់</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+  <!-- ✅ កិច្ចការទី៦ — Product Image -->
+  {% if product.image %}
+    <img src="{{ product.image.url }}" 
+         alt="{{ product.name }}"
+         style="max-width: 300px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+  {% else %}
+    <div style="width:300px; height:200px; background:#e2e8f0; border-radius:10px; 
+                display:flex; align-items:center; justify-content:center; 
+                margin-bottom:20px; color:#888;">
+        📷 គ្មានរូបភាព
+    </div>
+  {% endif %}
+
+  <!-- ១. ឈ្មោះផលិតផល និង badge ប្រភេទ -->
+  <h2>
+    {{ product.name }}
+    <span class="badge bg-secondary">{{ product.category }}</span>
+  </h2>
+
+  <!-- ២. តម្លៃ -->
+  <p><strong>តម្លៃ:</strong> ${{ product.price }}</p>
+
+  <!-- ៣. Barcode -->
+  <p><strong>Barcode:</strong> {{ product.barcode }}</p>
+
+  <!-- ៤. កម្រិតស្តុក — បង្ហាញព្រមានបើ stock < 10 -->
+  <p>
+    <strong>Stock:</strong> {{ product.stock }}
+    {% if product.stock < 10 %}
+      <span class="badge bg-danger">Low Stock</span>
+    {% endif %}
+  </p>
+
+  <!-- ✅ កិច្ចការទី៦ — AI Description -->
+  {% if ai_text %}
+    <div style="background:#f0fff4; border:1px solid #9ae6b4; 
+                padding:16px; border-radius:8px; margin-top:16px; margin-bottom:16px;">
+        <h5>🤖 AI Description</h5>
+        <p>{{ ai_text }}</p>
+    </div>
+  {% endif %}
+
+  <!-- ៥. តំណ ← ត្រឡប់ទៅបញ្ជីផលិតផល -->
+  <a href="/sales/products/" class="btn btn-secondary">
+    ← ត្រឡប់ទៅបញ្ជីផលិតផល
+  </a>
+
+</div>
+
+{% endblock %}
