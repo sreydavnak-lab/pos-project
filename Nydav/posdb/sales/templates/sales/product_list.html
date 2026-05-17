@@ -1,0 +1,87 @@
+<!-- sales/templates/sales/product_list.html -->
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <title>🛒 POS — បញ្ជីផលិតផល</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 900px; margin: 40px auto; padding: 0 20px; background: #f0f4f8; }
+        h1   { color: #1a202c; }
+        .product-card { background: white; border-radius: 10px; padding: 16px 20px; margin: 12px 0;
+                        box-shadow: 0 2px 6px rgba(0,0,0,0.08); display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+        .product-card h2 a { text-decoration: none; color: #2b6cb0; font-size: 1.1em; }
+        .badge  { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 0.8em;
+                  background: #ebf8ff; color: #2b6cb0; }
+        .price  { font-size: 1.3em; font-weight: bold; color: #276749; }
+        .stock  { font-size: 0.9em; color: #718096; }
+        .low    { color: #c53030; font-weight: bold; }
+        .empty  { color: #888; font-style: italic; }
+        nav a   { margin-right: 16px; color: #2b6cb0; }
+        .btn    { display: inline-block; padding: 6px 14px; border-radius: 6px;
+                  text-decoration: none; font-size: 0.85em; margin-top: 6px; }
+        .btn-add  { background: #2b6cb0; color: white; }
+        .btn-edit { background: #e2e8f0; color: #2d3748; }
+
+        /* ✅ កិច្ចការទី៦ — Product Image */
+        .product-img {
+            width: 80px; height: 80px; object-fit: cover;
+            border-radius: 8px; border: 1px solid #e2e8f0;
+        }
+        .no-img {
+            width: 80px; height: 80px; background: #e2e8f0;
+            border-radius: 8px; display: flex; align-items: center;
+            justify-content: center; color: #a0aec0; font-size: 0.75em; text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>🛒 បញ្ជីផលិតផល</h1>
+    <nav>
+        <a href="/sales/products/">ផលិតផល</a>
+        <a href="/sales/orders/">ការបញ្ជាទិញ</a>
+        <a href="/sales/orders/mine/">ការបញ្ជាទិញរបស់ខ្ញុំ</a>
+        <a href="/admin/">Admin</a>
+    </nav>
+
+    <!-- ✅ ប៊ូតុង Add Product -->
+    <div style="margin: 16px 0;">
+        <a href="/sales/products/add/" class="btn btn-add">➕ បន្ថែមផលិតផល</a>
+    </div>
+
+    <p>{{ products|length }} ផលិតផល active ក្នុងប្រព័ន្ធ</p>
+
+    {% for product in products %}
+    <div class="product-card">
+
+        <!-- ✅ កិច្ចការទី៦ — បង្ហាញរូបភាព -->
+        {% if product.image %}
+            <img src="{{ product.image.url }}" class="product-img" alt="{{ product.name }}">
+        {% else %}
+            <div class="no-img">គ្មាន​រូប</div>
+        {% endif %}
+
+        <div style="flex:1">
+            <h2><a href="/sales/products/{{ product.pk }}/">{{ product.name }}</a></h2>
+            <span class="badge">{{ product.get_category_display }}</span>
+            {% if product.barcode %}
+            <span class="stock"> &nbsp;Barcode: {{ product.barcode }}</span>
+            {% endif %}
+        </div>
+
+        <div style="text-align:right">
+            <p class="price">${{ product.price }}</p>
+            {% if product.stock <= 5 %}
+            <p class="low">⚠️ ស្តុកទាប: {{ product.stock }} នៅសល់</p>
+            {% else %}
+            <p class="stock">ក្នុងស្តុក: {{ product.stock }}</p>
+            {% endif %}
+            <!-- ✅ ប៊ូតុង Edit -->
+            <a href="/sales/products/{{ product.pk }}/edit/" class="btn btn-edit">✏️ កែប្រែ</a>
+        </div>
+
+    </div>
+    {% empty %}
+    <p class="empty">មិនទាន់មានផលិតផលទេ — <a href="/sales/products/add/">បន្ថែមឥឡូវ</a>!</p>
+    {% endfor %}
+</body>
+</html>
